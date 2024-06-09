@@ -1,11 +1,17 @@
 package com.sbproject.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"department"}) //-- this remove these properties from JSON request and response
 public class Employee {
 
     private String employeeId;
     private String firstName;
     private String lastName;
     private String emailId;
+
+    // @JsonIgnore
     private String department;
 
     public Employee(String employeeId, String firstName, String lastName, String emailId, String department) {

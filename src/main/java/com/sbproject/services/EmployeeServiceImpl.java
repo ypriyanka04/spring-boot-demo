@@ -1,8 +1,7 @@
 package com.sbproject.services;
 
+import com.sbproject.exceptions.EmployeeNotFoundException;
 import com.sbproject.models.Employee;
-import com.sbproject.repositories.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,4 +20,29 @@ public class EmployeeServiceImpl implements EmployeeService{
         employees.add(employee);
         return employee;
     }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employees;
+    }
+
+    @Override
+    public Employee getEmployeeById(String id) {
+        return employees.stream()
+                .filter(employee -> employee.getEmployeeId().equalsIgnoreCase(id))
+                .findFirst()
+                .orElseThrow(() -> new EmployeeNotFoundException("" + "Employee not found with id: " + id));
+    }
+
+    @Override
+    public String deleteEmployeeById(String id) {
+        Employee employee = employees.stream()
+                .filter(e -> e.getEmployeeId().equalsIgnoreCase(id))
+                .findFirst()
+                .get();
+        employees.remove(employee);
+        return "Employee deleted successfully with the id: " + id;
+    }
+
+
 }
