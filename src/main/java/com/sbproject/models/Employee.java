@@ -3,7 +3,7 @@ package com.sbproject.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties({"department"}) //-- this remove these properties from JSON request and response
+// @JsonIgnoreProperties({"department", "emailId"}) //-- this remove these properties from JSON request and response
 public class Employee {
 
     private String employeeId;
@@ -13,6 +13,9 @@ public class Employee {
 
     // @JsonIgnore
     private String department;
+
+    public Employee() {
+    }
 
     public Employee(String employeeId, String firstName, String lastName, String emailId, String department) {
         this.employeeId = employeeId;

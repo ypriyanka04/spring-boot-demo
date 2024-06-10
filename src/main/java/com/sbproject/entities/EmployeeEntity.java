@@ -15,7 +15,6 @@ import lombok.Setter;
 public class EmployeeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String employeeId;
     private String firstName;
     private String lastName;

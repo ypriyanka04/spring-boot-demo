@@ -1,9 +1,9 @@
 package com.sbproject.services;
 
 import com.sbproject.entities.EmployeeEntity;
-import com.sbproject.exceptions.EmployeeNotFoundException;
 import com.sbproject.models.Employee;
 import com.sbproject.repositories.EmployeeRepository;
+import org.hibernate.metamodel.model.domain.EmbeddableDomainType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeV2ServiceImpl implements EmployeeService{
@@ -19,12 +20,12 @@ public class EmployeeV2ServiceImpl implements EmployeeService{
     public EmployeeRepository employeeRepository;
     @Override
     public Employee save(Employee employee) {
-        if(employee.getEmployeeId()== null || employee.getEmailId().isEmpty()){
-            employee.setEmployeeId(UUID.randomUUID().toString());
+        if(employee.getEmployeeId() == null || employee.getEmployeeId().isEmpty()){
+            employee.setEmployeeId((UUID.randomUUID().toString()));
         }
 
         EmployeeEntity entity = new EmployeeEntity();
-        BeanUtils.copyProperties(employee,entity);
+        BeanUtils.copyProperties(employee,entity); // Copy properties from EmployeeEntity to Employee
         employeeRepository.save(entity);
 
         return employee;
@@ -32,16 +33,29 @@ public class EmployeeV2ServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getAllEmployees() {
-        return null;
+        List<EmployeeEntity> employeeEntityList = employeeRepository.findAll();
+
+        return employeeEntityList.stream()
+                .map(employeeEntity -> {
+                    Employee employee = new Employee();
+                    BeanUtils.copyProperties(employeeEntity, employee);
+                    return employee;
+                }).collect(Collectors.toList());
     }
 
     @Override
     public Employee getEmployeeById(String id) {
-        return null;
+        EmployeeEntity employeeEntity = employeeRepository.findById(id).get();
+
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeEntity,employee);
+
+        return employee;
     }
 
     @Override
     public String deleteEmployeeById(String id) {
-        return null;
+        employeeRepository.deleteById(id);
+        return "Employee deleted successfully with the id: " + id;
     }
 }

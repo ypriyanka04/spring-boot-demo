@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/employees")
+@RequestMapping("/v1/employees")
 public class EmployeeController {
 
     @Qualifier("employeeServiceImpl")
@@ -32,7 +32,7 @@ public class EmployeeController {
         return employeeService.getEmployeeById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     public String deleteEmployeeById(@PathVariable String id){
         return employeeService.deleteEmployeeById(id);
 
